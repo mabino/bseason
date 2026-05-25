@@ -145,4 +145,23 @@ describe('REST API Endpoints', () => {
     expect(challengeResponse.body.challenges[0].winningTeam).toBe('t1');
     expect(challengeResponse.body.challenges[0].narrative).toBe('Team A climbed amazingly fast!');
   });
+
+  test('POST /api/upload should receive base64 image and return photo path', async () => {
+    const base64Sample = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAP//////////////////////////////////////////////////////////////////////////////////////wgALCAABAAEBAREA/8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAQABPxA=';
+    const response = await request(app)
+      .post('/api/upload')
+      .send({ image: base64Sample })
+      .expect(200);
+
+    expect(response.body).toHaveProperty('photo');
+    expect(response.body.photo).toContain('uploads/upload_');
+
+    // Clean up uploaded file
+    const fs = require('fs');
+    const path = require('path');
+    const uploadedPath = path.join(__dirname, '../public', response.body.photo);
+    if (fs.existsSync(uploadedPath)) {
+      fs.unlinkSync(uploadedPath);
+    }
+  });
 });

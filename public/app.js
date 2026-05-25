@@ -4,7 +4,7 @@ let contestants = [];
 let challenges = [];
 let seasons = [];
 let activeSeasonId = null;
-let currentSelectedAvatar = 'images/contestants/fire_bear.png';
+let currentSelectedAvatar = 'images/contestants/fire.svg';
 
 // ─── Initial Page Load ───
 document.addEventListener('DOMContentLoaded', async () => {
@@ -135,7 +135,7 @@ function renderDashboard() {
         <div class="team-block flex-row-justify" style="border-color:${idx === 0 ? 'var(--color-winner)' : 'var(--panel-border)'}; padding: 0.5rem 0;">
           <div style="display:flex; align-items:center; gap:0.75rem;">
             <span style="font-size:1.5rem">${rankIcons[idx]}</span>
-            <img src="${c.photo || 'images/contestants/fire_bear.png'}" style="width:36px; height:36px; border-radius:50%; object-fit:cover;" />
+            <img src="${c.photo || 'images/contestants/fire.svg'}" style="width:36px; height:36px; border-radius:50%; object-fit:cover;" />
             <div>
               <div style="font-weight:700;">${c.name}</div>
               <div class="power-tags-row" style="margin:0">${powerStr}</div>
@@ -181,7 +181,7 @@ function renderContestants() {
     
     card.innerHTML = `
       <div class="contestant-card-hero">
-        <img class="contestant-img" src="${c.photo || 'images/contestants/fire_bear.png'}" alt="${c.name}" />
+        <img class="contestant-img" src="${c.photo || 'images/contestants/fire.svg'}" alt="${c.name}" />
         ${isEliminated ? '<div style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.65); display:flex; align-items:center; justify-content:center; font-size:1.2rem; font-weight:800; color:var(--color-danger); text-transform:uppercase; letter-spacing:0.1em; transform: rotate(-5deg);">ELIMINATED</div>' : ''}
       </div>
       <div class="power-tags-row">${powerBadges}</div>
@@ -333,7 +333,7 @@ function renderSeasonDetail(sId) {
 
       memberPills += `
         <span class="member-pill ${isEliminated ? 'eliminated' : ''}">
-          <img src="${c.photo || 'images/contestants/fire_bear.png'}" style="width:16px; height:16px; border-radius:50%; object-fit:cover; margin-right:0.25rem;" />
+          <img src="${c.photo || 'images/contestants/fire.svg'}" style="width:16px; height:16px; border-radius:50%; object-fit:cover; margin-right:0.25rem;" />
           ${c.name} ${isEliminated ? '🪓' : ''}
         </span>
       `;
@@ -488,7 +488,7 @@ function openContestantModal(cId = null) {
     document.getElementById('contestant-change-desc').value = '';
 
     // Mark selected avatar option
-    currentSelectedAvatar = c.photo || 'images/contestants/fire_bear.png';
+    currentSelectedAvatar = c.photo || 'images/contestants/fire.svg';
     document.querySelectorAll('.avatar-option').forEach(opt => {
       const img = opt.querySelector('img');
       if (img && img.getAttribute('src') === currentSelectedAvatar) {
@@ -512,7 +512,7 @@ function openContestantModal(cId = null) {
     document.getElementById('contestant-change-desc-group').classList.add('hidden');
     
     // Select first avatar by default
-    currentSelectedAvatar = 'images/contestants/fire_bear.png';
+    currentSelectedAvatar = 'images/contestants/fire.svg';
     document.querySelectorAll('.avatar-option').forEach((opt, idx) => {
       if (idx === 0) opt.classList.add('selected');
       else opt.classList.remove('selected');
@@ -1073,5 +1073,196 @@ async function deleteActiveSeason() {
     switchView('seasons');
   } catch (err) {
     alert(err.message);
+  }
+}
+
+// ─── Custom Canvas Image Cropping & Uploading Controller ───
+let cropImg = null;
+let cropZoom = 1.0;
+let cropPanX = 0;
+let cropPanY = 0;
+let isDragging = false;
+let dragStartX = 0;
+let dragStartY = 0;
+
+function handleImageUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    cropImg = new Image();
+    cropImg.onload = function() {
+      // Open crop modal
+      document.getElementById('crop-modal').classList.add('active');
+      
+      // Reset variables
+      cropZoom = 1.0;
+      cropPanX = 0;
+      cropPanY = 0;
+      document.getElementById('crop-zoom').value = 1.0;
+      
+      initCropCanvas();
+    };
+    cropImg.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function initCropCanvas() {
+  const canvas = document.getElementById('crop-canvas');
+  const ctx = canvas.getContext('2d');
+  
+  // Set drawing dimensions
+  canvas.width = 300;
+  canvas.height = 300;
+  
+  // Draw initial canvas state
+  drawCropCanvas();
+
+  // Remove existing listeners by cloning canvas (avoid multiple event listener binding bug)
+  const newCanvas = canvas.cloneNode(true);
+  canvas.parentNode.replaceChild(newCanvas, canvas);
+  
+  // Re-bind listeners on fresh canvas
+  newCanvas.addEventListener('mousedown', startDrag);
+  newCanvas.addEventListener('mousemove', drag);
+  newCanvas.addEventListener('mouseup', endDrag);
+  newCanvas.addEventListener('mouseleave', endDrag);
+  
+  newCanvas.addEventListener('touchstart', startDragTouch);
+  newCanvas.addEventListener('touchmove', dragTouch);
+  newCanvas.addEventListener('touchend', endDrag);
+
+  // Bind zoom slider
+  const zoomSlider = document.getElementById('crop-zoom');
+  zoomSlider.oninput = function() {
+    cropZoom = parseFloat(this.value);
+    drawCropCanvas();
+  };
+}
+
+function drawCropCanvas() {
+  const canvas = document.getElementById('crop-canvas');
+  if (!canvas || !cropImg) return;
+  
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+  // Center coordinates of canvas
+  const cx = canvas.width / 2;
+  const cy = canvas.height / 2;
+  
+  // Calculate responsive drawing box
+  const dw = cropImg.width * cropZoom;
+  const dh = cropImg.height * cropZoom;
+  
+  // Center position offsetted by pan coordinates
+  const dx = cx - dw / 2 + cropPanX;
+  const dy = cy - dh / 2 + cropPanY;
+  
+  ctx.drawImage(cropImg, dx, dy, dw, dh);
+}
+
+function startDrag(e) {
+  isDragging = true;
+  dragStartX = e.clientX - cropPanX;
+  dragStartY = e.clientY - cropPanY;
+}
+
+function drag(e) {
+  if (!isDragging) return;
+  cropPanX = e.clientX - dragStartX;
+  cropPanY = e.clientY - dragStartY;
+  drawCropCanvas();
+}
+
+function startDragTouch(e) {
+  if (e.touches.length !== 1) return;
+  isDragging = true;
+  dragStartX = e.touches[0].clientX - cropPanX;
+  dragStartY = e.touches[0].clientY - cropPanY;
+}
+
+function dragTouch(e) {
+  if (!isDragging || e.touches.length !== 1) return;
+  e.preventDefault(); // prevent scrolling while dragging
+  cropPanX = e.touches[0].clientX - dragStartX;
+  cropPanY = e.touches[0].clientY - dragStartY;
+  drawCropCanvas();
+}
+
+function endDrag() {
+  isDragging = false;
+}
+
+function closeCropModal() {
+  document.getElementById('crop-modal').classList.remove('active');
+  document.getElementById('contestant-upload').value = ''; // reset file input
+}
+
+async function applyCrop() {
+  if (!cropImg) return;
+  
+  // Bounding guide variables
+  const canvasWidth = 300;
+  const canvasHeight = 300;
+  const cropGuideRadius = 110; // circle guide is 220px wide (radius 110)
+  
+  // Calculate source dimensions and offsets matching crop guide
+  const dw = cropImg.width * cropZoom;
+  const dh = cropImg.height * cropZoom;
+  
+  const dx = (canvasWidth / 2) - (dw / 2) + cropPanX;
+  const dy = (canvasHeight / 2) - (dh / 2) + cropPanY;
+  
+  // Center of crop guide in source image coordinates
+  const sx = ((canvasWidth / 2) - dx) / cropZoom;
+  const sy = ((canvasHeight / 2) - dy) / cropZoom;
+  const sr = cropGuideRadius / cropZoom;
+  
+  // Source crop bounding box parameters
+  const cropX = sx - sr;
+  const cropY = sy - sr;
+  const cropW = sr * 2;
+  const cropH = sr * 2;
+  
+  // Render cropped frame to offscreen 500x500 canvas (reasonable max dimensions)
+  const offscreen = document.createElement('canvas');
+  offscreen.width = 500;
+  offscreen.height = 500;
+  const oCtx = offscreen.getContext('2d');
+  
+  // Enable high quality scaling
+  oCtx.imageSmoothingEnabled = true;
+  oCtx.imageSmoothingQuality = 'high';
+  
+  oCtx.drawImage(cropImg, cropX, cropY, cropW, cropH, 0, 0, 500, 500);
+  
+  // Convert cropped frame to compressed JPEG at 0.85 quality (highly optimized storage footprint, ~30KB)
+  const dataUrl = offscreen.toDataURL('image/jpeg', 0.85);
+  
+  try {
+    const response = await fetch('api/upload', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ image: dataUrl })
+    });
+    
+    if (!response.ok) throw new Error('Upload failed');
+    
+    const result = await response.json();
+    
+    // Save to form URL input
+    document.getElementById('contestant-photo').value = result.photo;
+    
+    // Set preview option
+    currentSelectedAvatar = result.photo;
+    document.querySelectorAll('.avatar-option').forEach(opt => opt.classList.remove('selected'));
+    
+    // Successfully applied
+    closeCropModal();
+  } catch (err) {
+    alert('Cropping error: ' + err.message);
   }
 }

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#4caf50" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#4caf50" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="100" height="100" fill="#120e25" rx="15" />
+  <circle cx="50" cy="50" r="40" fill="url(#glow)" />
+  <!-- Minimalist leaves -->
+  <path d="M50 80C50 80 50 45 68 32C52 32 45 48 45 48C45 48 38 25 22 25C22 25 32 50 50 80Z" fill="#4caf50" filter="drop-shadow(0 0 6px rgba(76,175,80,0.8))" />
+  <path d="M50 45C54 36 60 30 68 32" fill="none" stroke="#a7ffeb" stroke-width="2" />
+  <path d="M38 35C32 28 26 25 22 25" fill="none" stroke="#a7ffeb" stroke-width="2" />
+</svg>

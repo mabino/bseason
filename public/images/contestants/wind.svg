@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#03a9f4" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#03a9f4" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="100" height="100" fill="#120e25" rx="15" />
+  <circle cx="50" cy="50" r="40" fill="url(#glow)" />
+  <!-- Wind drafts -->
+  <path d="M25 35C40 35 45 25 60 25C70 25 75 30 75 35C75 40 68 43 62 38C58 35 55 35 48 38" fill="none" stroke="#03a9f4" stroke-width="4" stroke-linecap="round" filter="drop-shadow(0 0 5px rgba(3,169,244,0.8))" />
+  <path d="M20 52C32 52 38 45 50 45C60 45 65 49 65 53C65 57 59 59 54 55C50 52 48 52 42 55" fill="none" stroke="#80deea" stroke-width="3.5" stroke-linecap="round" filter="drop-shadow(0 0 4px rgba(128,222,234,0.8))" />
+  <path d="M30 68C42 68 48 60 60 60C68 60 72 63 72 66C72 69 67 71 63 68" fill="none" stroke="#03a9f4" stroke-width="3" stroke-linecap="round" filter="drop-shadow(0 0 4px rgba(3,169,244,0.7))" />
+</svg>

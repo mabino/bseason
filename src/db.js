@@ -21,7 +21,7 @@ const defaultData = {
       name: 'Barnaby',
       powers: ['p1'],
       bio: 'A cute fluffy teddy bear with a warm heart and sizzling flame powers.',
-      photo: 'images/contestants/fire_bear.png',
+      photo: 'images/contestants/fire.svg',
       versions: [
         {
           version: 1,
@@ -29,7 +29,7 @@ const defaultData = {
           name: 'Barnaby',
           powers: ['p1'],
           bio: 'A cute fluffy teddy bear with a warm heart and sizzling flame powers.',
-          photo: 'images/contestants/fire_bear.png',
+          photo: 'images/contestants/fire.svg',
           changeDescription: 'Initial profile creation'
         }
       ]
@@ -39,7 +39,7 @@ const defaultData = {
       name: 'Penelope',
       powers: ['p2'],
       bio: 'A galactic panda who loves stars and drifting through the cosmos.',
-      photo: 'images/contestants/cosmic_panda.png',
+      photo: 'images/contestants/cosmic.svg',
       versions: [
         {
           version: 1,
@@ -47,7 +47,7 @@ const defaultData = {
           name: 'Penelope',
           powers: ['p2'],
           bio: 'A galactic panda who loves stars and drifting through the cosmos.',
-          photo: 'images/contestants/cosmic_panda.png',
+          photo: 'images/contestants/cosmic.svg',
           changeDescription: 'Initial profile creation'
         }
       ]
@@ -57,7 +57,7 @@ const defaultData = {
       name: 'Oliver',
       powers: ['p3'],
       bio: 'A forest guardian owl who protects woodlands and talks to vines.',
-      photo: 'images/contestants/nature_owl.png',
+      photo: 'images/contestants/nature.svg',
       versions: [
         {
           version: 1,
@@ -65,7 +65,7 @@ const defaultData = {
           name: 'Oliver',
           powers: ['p3'],
           bio: 'A forest guardian owl who protects woodlands and talks to vines.',
-          photo: 'images/contestants/nature_owl.png',
+          photo: 'images/contestants/nature.svg',
           changeDescription: 'Initial profile creation'
         }
       ]
@@ -75,7 +75,7 @@ const defaultData = {
       name: 'Barnaby Jr',
       powers: ['p4'],
       bio: 'A mysterious long-eared bunny who walks in shadows and loves carrots.',
-      photo: 'images/contestants/void_rabbit.png',
+      photo: 'images/contestants/void.svg',
       versions: [
         {
           version: 1,
@@ -83,7 +83,7 @@ const defaultData = {
           name: 'Barnaby Jr',
           powers: ['p4'],
           bio: 'A mysterious long-eared bunny who walks in shadows and loves carrots.',
-          photo: 'images/contestants/void_rabbit.png',
+          photo: 'images/contestants/void.svg',
           changeDescription: 'Initial profile creation'
         }
       ]

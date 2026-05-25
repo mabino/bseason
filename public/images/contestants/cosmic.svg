@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#9c27b0" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#9c27b0" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="100" height="100" fill="#120e25" rx="15" />
+  <circle cx="50" cy="50" r="40" fill="url(#glow)" />
+  <!-- Planet ring -->
+  <ellipse cx="50" cy="50" rx="35" ry="10" fill="none" stroke="#e0aaff" stroke-width="4" transform="rotate(-15 50 50)" filter="drop-shadow(0 0 6px rgba(224,170,255,0.8))" />
+  <!-- Planet core -->
+  <circle cx="50" cy="50" r="18" fill="#9c27b0" filter="drop-shadow(0 0 8px rgba(156,39,176,0.8))" />
+  <!-- Celestial sparkles -->
+  <path d="M28 28L30 30L28 32L26 30 Z" fill="#ffffff" />
+  <path d="M72 68L74 70L72 72L70 70 Z" fill="#ffffff" />
+  <path d="M70 25L71 27L70 29L69 27 Z" fill="#ffffff" />
+</svg>

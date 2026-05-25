@@ -379,6 +379,45 @@ app.delete('/api/seasons/:id/rounds/:roundIndex/eliminations/:contestantId', (re
   res.json(round);
 });
 
+// ─── Image Upload API ────────────────────────────────────────────────────────
+app.post('/api/upload', (req, res) => {
+  const { image } = req.body;
+  if (!image) {
+    return res.status(400).json({ error: 'Image data is required' });
+  }
+
+  const fs = require('fs');
+  try {
+    const matches = image.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+    if (!matches || matches.length !== 3) {
+      return res.status(400).json({ error: 'Invalid base64 image data format' });
+    }
+
+    const type = matches[1];
+    const base64Data = matches[2];
+    const buffer = Buffer.from(base64Data, 'base64');
+
+    // Create uploads directory inside public
+    const uploadsDir = path.join(__dirname, 'public/uploads');
+    if (!fs.existsSync(uploadsDir)) {
+      fs.mkdirSync(uploadsDir, { recursive: true });
+    }
+
+    let extension = 'jpg';
+    if (type.includes('png')) extension = 'png';
+    else if (type.includes('webp')) extension = 'webp';
+
+    const filename = `upload_${Date.now()}_${Math.floor(Math.random() * 1000)}.${extension}`;
+    const filePath = path.join(uploadsDir, filename);
+
+    fs.writeFileSync(filePath, buffer);
+
+    res.json({ photo: `uploads/${filename}` });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to save uploaded image: ' + err.message });
+  }
+});
+
 // Resilient fallback for SPA base routing
 app.get('*', (req, res) => {
   // If request is for api, return 404
