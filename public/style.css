@@ -4,7 +4,7 @@
 :root {
   /* Color Palette (HSL based) */
   --bg-color: #0c0a15;
-  --bg-gradient: radial-gradient(circle at 50% 0%, #1e1335 0%, #0c0a15 70%);
+  --bg-gradient: none;
   --panel-bg: rgba(22, 18, 38, 0.65);
   --panel-border: rgba(255, 255, 255, 0.08);
   --panel-border-hover: rgba(157, 78, 221, 0.3);
@@ -93,9 +93,7 @@ h1, h2, h3, h4 {
 
 h1 {
   font-size: 2.5rem;
-  background: linear-gradient(135deg, #fff 0%, #c8b6ff 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #fff;
   margin-bottom: 0.5rem;
 }
 
@@ -150,14 +148,12 @@ p {
 .logo-text {
   font-weight: 800;
   font-size: 1.5rem;
-  background: linear-gradient(to right, #ffffff, #c8b6ff);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #fff;
 }
 
 .logo-badge {
   font-size: 0.75rem;
-  background: linear-gradient(135deg, var(--primary), var(--accent));
+  background: var(--primary);
   color: #fff;
   padding: 0.15rem 0.5rem;
   border-radius: 10px;
@@ -235,21 +231,7 @@ p {
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7), 0 0 15px rgba(157, 78, 221, 0.05);
 }
 
-.glass-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, transparent, var(--primary), transparent);
-  opacity: 0;
-  transition: var(--transition);
-}
-
-.glass-card:hover::before {
-  opacity: 1;
-}
+/* glass-card top-highlight removed */
 
 /* Card Header */
 .card-header-row {
@@ -311,25 +293,25 @@ p {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--primary) 0%, #7b2cbf 100%);
+  background: var(--primary);
   border: none;
   box-shadow: 0 4px 15px rgba(157, 78, 221, 0.3);
 }
 
 .btn-primary:hover {
-  background: linear-gradient(135deg, #b5179e 0%, var(--primary) 100%);
+  background: #7b2cbf;
   box-shadow: 0 6px 20px rgba(157, 78, 221, 0.5);
   transform: translateY(-1px);
 }
 
 .btn-accent {
-  background: linear-gradient(135deg, var(--accent) 0%, #b5179e 100%);
+  background: var(--accent);
   border: none;
   box-shadow: 0 4px 15px rgba(255, 0, 127, 0.3);
 }
 
 .btn-accent:hover {
-  background: linear-gradient(135deg, #ff409f 0%, var(--accent) 100%);
+  background: #cc005f;
   box-shadow: 0 6px 20px rgba(255, 0, 127, 0.5);
   transform: translateY(-1px);
 }

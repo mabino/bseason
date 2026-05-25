@@ -110,7 +110,7 @@ function renderDashboard() {
     document.getElementById('dash-active-summary').innerHTML = roundsHtml;
   } else {
     document.getElementById('dash-active-season-name').textContent = 'None';
-    document.getElementById('dash-active-season-status').textContent = 'Initialize one to start the show!';
+    document.getElementById('dash-active-season-status').textContent = '';
     emptyState.classList.remove('hidden');
     activeState.classList.add('hidden');
   }
@@ -372,15 +372,16 @@ function renderSeasonDetail(sId) {
             <p style="font-size:0.85rem; margin-top:0.25rem;">${ch.description || ''}</p>
             ${ch.narrative ? `<p style="font-style:italic; font-size:0.85rem; background:rgba(255,255,255,0.02); padding:0.5rem; border-radius:4px; margin-top:0.5rem; border-left:2px solid var(--secondary);">"${ch.narrative}"</p>` : ''}
             
-            <div class="team-placement-row">
+            <div class="team-placement-row" style="grid-template-columns: ${s.teams.length === 2 ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)'};">
               <div class="placement-badge winner" style="${winT ? `border-color:${winT.color};` : ''}">
                 <span>Win</span>
                 <span style="font-size:0.75rem; color:#fff;">${winT ? winT.name : 'Unknown'}</span>
               </div>
+              ${s.teams.length > 2 ? `
               <div class="placement-badge safe" style="${safeT ? `border-color:${safeT.color};` : ''}">
                 <span>Safe</span>
                 <span style="font-size:0.75rem; color:#fff;">${safeT ? safeT.name : 'Unknown'}</span>
-              </div>
+              </div>` : ''}
               <div class="placement-badge danger" style="${dangerT ? `border-color:${dangerT.color};` : ''}">
                 <span>Danger</span>
                 <span style="font-size:0.75rem; color:#fff;">${dangerT ? dangerT.name : 'Unknown'}</span>
@@ -438,11 +439,9 @@ function renderSeasonDetail(sId) {
   // 3. Operational controls box
   let controlsHtml = '';
   if (s.status === 'active') {
-    // Find active non-eliminated roster to determine if show is runnable
     controlsHtml = `
       <div class="text-center">
-        <p style="font-size:0.9rem; margin-bottom:1rem;">Add challenge instances and eliminate contestants to progress the reality bracket!</p>
-        <button class="btn btn-accent btn-lg" style="width:100%;" onclick="openChallengeRecordModal()">🎮 Quick Record Challenge</button>
+        <button class="btn btn-accent btn-lg" style="width:100%;" onclick="openChallengeRecordModal()">🎮 Create a Challenge</button>
       </div>
     `;
   } else {
@@ -883,6 +882,22 @@ function openChallengeRecordModal(rIdx = 0, chInstId = null) {
     form.reset();
   }
 
+  // If only 2 teams, safe = winning automatically — hide safe field
+  const safeGroup = document.getElementById('ch-rec-safe-group');
+  if (s.teams.length === 2) {
+    if (safeGroup) safeGroup.classList.add('hidden');
+    // Pre-link safe to winning on winning change
+    document.getElementById('ch-rec-winning').onchange = function() {
+      document.getElementById('ch-rec-safe').value = this.value;
+    };
+    // Pre-fill safe = winning current value
+    const winSel = document.getElementById('ch-rec-winning');
+    document.getElementById('ch-rec-safe').value = winSel.value;
+  } else {
+    if (safeGroup) safeGroup.classList.remove('hidden');
+    document.getElementById('ch-rec-winning').onchange = null;
+  }
+
   modal.classList.add('active');
 }
 
@@ -909,9 +924,14 @@ async function saveChallengeInstance(e) {
   const title = document.getElementById('ch-rec-title').value;
   const description = document.getElementById('ch-rec-desc').value;
   const winningTeam = document.getElementById('ch-rec-winning').value;
-  const safeTeam = document.getElementById('ch-rec-safe').value;
   const dangerTeam = document.getElementById('ch-rec-danger').value;
   const narrative = document.getElementById('ch-rec-narrative').value;
+
+  // For 2-team seasons, safe team = winning team automatically
+  const s = seasons.find(x => x.id === activeSeasonId);
+  const safeTeam = (s && s.teams.length === 2)
+    ? winningTeam
+    : document.getElementById('ch-rec-safe').value;
 
   const payload = {
     challengeId: challengeId || null,
@@ -943,6 +963,8 @@ async function saveChallengeInstance(e) {
     closeChallengeRecordModal();
     await loadAllData();
     renderAllViews();
+    // Immediately switch back to season detail so results are visible
+    viewSeasonDetail(activeSeasonId);
   } catch (err) {
     alert(err.message);
   }

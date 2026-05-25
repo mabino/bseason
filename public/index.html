@@ -15,7 +15,6 @@
       <div class="logo-section" id="brand-logo">
         <span class="logo-icon">🧸</span>
         <span class="logo-text">B-Season</span>
-        <span class="logo-badge">PRO</span>
       </div>
       <nav class="app-nav">
         <button class="nav-tab active" id="tab-dashboard" onclick="switchView('dashboard')">📊 Dashboard</button>
@@ -42,17 +41,15 @@
           <div class="glass-card text-center">
             <h3 class="color-winner">Active Season</h3>
             <h2 id="dash-active-season-name">None</h2>
-            <p id="dash-active-season-status">Initialize one to start the show!</p>
+            <p id="dash-active-season-status"></p>
           </div>
           <div class="glass-card text-center">
             <h3 class="color-safe">Contestants Pool</h3>
             <h2 id="dash-contestants-count">0</h2>
-            <p>Fully trained with special powers</p>
           </div>
           <div class="glass-card text-center">
             <h3 class="color-danger">Global Challenges</h3>
             <h2 id="dash-challenges-count">0</h2>
-            <p>Available in the reusable library</p>
           </div>
         </div>
 
@@ -339,7 +336,7 @@
 
         <div class="text-right mt-2">
           <button type="button" class="btn" onclick="closeSeasonWizard()">Cancel</button>
-          <button type="submit" class="btn btn-primary btn-lg">🚀 Launch Reality Show!</button>
+          <button type="submit" class="btn btn-primary btn-lg">🚀 Start Season</button>
         </div>
       </form>
     </div>
@@ -402,7 +399,7 @@
               <!-- Populated dynamically with season teams -->
             </select>
           </div>
-          <div class="form-group">
+          <div class="form-group" id="ch-rec-safe-group">
             <label for="ch-rec-safe">🛡️ Safe Team</label>
             <select id="ch-rec-safe" required>
               <!-- Populated dynamically with season teams -->

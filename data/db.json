@@ -57,7 +57,7 @@
         "p1"
       ],
       "bio": "A cute fluffy teddy bear with a warm heart and sizzling flame powers.",
-      "photo": "images/contestants/fire_bear.png",
+      "photo": "images/contestants/fire.svg",
       "versions": [
         {
           "version": 1,
@@ -69,6 +69,17 @@
           "bio": "A cute fluffy teddy bear with a warm heart and sizzling flame powers.",
           "photo": "images/contestants/fire_bear.png",
           "changeDescription": "Initial profile creation"
+        },
+        {
+          "version": 2,
+          "timestamp": "2026-05-25T21:15:52.380Z",
+          "name": "Barnaby",
+          "powers": [
+            "p1"
+          ],
+          "bio": "A cute fluffy teddy bear with a warm heart and sizzling flame powers.",
+          "photo": "images/contestants/fire.svg",
+          "changeDescription": "Avatar portrait updated"
         }
       ]
     },
@@ -79,7 +90,7 @@
         "p2"
       ],
       "bio": "A galactic panda who loves stars and drifting through the cosmos.",
-      "photo": "images/contestants/cosmic_panda.png",
+      "photo": "images/contestants/cosmic.svg",
       "versions": [
         {
           "version": 1,
@@ -91,6 +102,17 @@
           "bio": "A galactic panda who loves stars and drifting through the cosmos.",
           "photo": "images/contestants/cosmic_panda.png",
           "changeDescription": "Initial profile creation"
+        },
+        {
+          "version": 2,
+          "timestamp": "2026-05-25T21:15:56.862Z",
+          "name": "Penelope",
+          "powers": [
+            "p2"
+          ],
+          "bio": "A galactic panda who loves stars and drifting through the cosmos.",
+          "photo": "images/contestants/cosmic.svg",
+          "changeDescription": "Avatar portrait updated"
         }
       ]
     },
@@ -101,7 +123,7 @@
         "p3"
       ],
       "bio": "A forest guardian owl who protects woodlands and talks to vines.",
-      "photo": "images/contestants/nature_owl.png",
+      "photo": "images/contestants/nature.svg",
       "versions": [
         {
           "version": 1,
@@ -113,6 +135,17 @@
           "bio": "A forest guardian owl who protects woodlands and talks to vines.",
           "photo": "images/contestants/nature_owl.png",
           "changeDescription": "Initial profile creation"
+        },
+        {
+          "version": 2,
+          "timestamp": "2026-05-25T21:16:06.041Z",
+          "name": "Oliver",
+          "powers": [
+            "p3"
+          ],
+          "bio": "A forest guardian owl who protects woodlands and talks to vines.",
+          "photo": "images/contestants/nature.svg",
+          "changeDescription": "Avatar portrait updated"
         }
       ]
     },
@@ -123,7 +156,7 @@
         "p4"
       ],
       "bio": "A mysterious long-eared bunny who walks in shadows and loves carrots.",
-      "photo": "images/contestants/void_rabbit.png",
+      "photo": "images/contestants/void.svg",
       "versions": [
         {
           "version": 1,
@@ -135,6 +168,17 @@
           "bio": "A mysterious long-eared bunny who walks in shadows and loves carrots.",
           "photo": "images/contestants/void_rabbit.png",
           "changeDescription": "Initial profile creation"
+        },
+        {
+          "version": 2,
+          "timestamp": "2026-05-25T21:16:15.210Z",
+          "name": "Barnaby Jr",
+          "powers": [
+            "p4"
+          ],
+          "bio": "A mysterious long-eared bunny who walks in shadows and loves carrots.",
+          "photo": "images/contestants/void.svg",
+          "changeDescription": "Avatar portrait updated"
         }
       ]
     }
@@ -161,5 +205,72 @@
       "description": "A high-speed race down the slippery peaks of Mount Shiver on makeshift sleds."
     }
   ],
-  "seasons": []
+  "seasons": [
+    {
+      "id": "s_1779744030712_krze4pymf",
+      "name": "Season 1: Battle for Dream Dreamers",
+      "status": "active",
+      "roundsCount": 5,
+      "teamsCount": 2,
+      "teams": [
+        {
+          "id": "team_0_1779744030667",
+          "name": "Team Inferno",
+          "color": "#e91e63",
+          "members": [
+            "c1",
+            "c2"
+          ]
+        },
+        {
+          "id": "team_1_1779744030667",
+          "name": "Team Aurora",
+          "color": "#00bcd4",
+          "members": [
+            "c3",
+            "c4"
+          ]
+        }
+      ],
+      "rounds": [
+        {
+          "roundNumber": 1,
+          "challenges": [
+            {
+              "id": "inst_1779744185330",
+              "challengeId": "ch1",
+              "title": "The Volcano Scramble",
+              "description": "Teams must climb the active Mt. Fluff and retrieve the Golden Acorn without getting singed.",
+              "winningTeam": "team_0_1779744030667",
+              "safeTeam": "team_0_1779744030667",
+              "dangerTeam": "team_1_1779744030667",
+              "narrative": ""
+            }
+          ],
+          "eliminations": []
+        },
+        {
+          "roundNumber": 2,
+          "challenges": [],
+          "eliminations": []
+        },
+        {
+          "roundNumber": 3,
+          "challenges": [],
+          "eliminations": []
+        },
+        {
+          "roundNumber": 4,
+          "challenges": [],
+          "eliminations": []
+        },
+        {
+          "roundNumber": 5,
+          "challenges": [],
+          "eliminations": []
+        }
+      ],
+      "createdAt": "2026-05-25T21:20:30.712Z"
+    }
+  ]
 }
