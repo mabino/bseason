@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  bseason-test:
+    container_name: bseason-test
+    build:
+      context: .
+      target: tester
+    environment:
+      - NODE_ENV=test

@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  bseason:
+    container_name: bseason
+    build:
+      context: .
+      target: production
+    image: bseason:latest
+    environment:
+      - NODE_ENV=production
+      - PORT=8080
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
+    networks:
+      - apps_net
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8080/api/powers"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+networks:
+  apps_net:
+    name: apps_net
+    external: true

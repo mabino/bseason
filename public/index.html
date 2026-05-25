@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>B-Season — The Stuffed Animal Reality Show Organizer</title>
+  <meta name="description" content="Organize, record, summarize, and visualize bracketed competitions between powerful stuffed animals." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- ─── Global App Header ─── -->
+    <header class="app-header">
+      <div class="logo-section" id="brand-logo">
+        <span class="logo-icon">🧸</span>
+        <span class="logo-text">B-Season</span>
+        <span class="logo-badge">PRO</span>
+      </div>
+      <nav class="app-nav">
+        <button class="nav-tab active" id="tab-dashboard" onclick="switchView('dashboard')">📊 Dashboard</button>
+        <button class="nav-tab" id="tab-contestants" onclick="switchView('contestants')">🧸 Contestants</button>
+        <button class="nav-tab" id="tab-powers" onclick="switchView('powers')">⚡ Powers Library</button>
+        <button class="nav-tab" id="tab-seasons" onclick="switchView('seasons')">🏆 Seasons</button>
+      </nav>
+    </header>
+
+    <!-- ─── Main View Shell ─── -->
+    <main class="main-content">
+      
+      <!-- 1. DASHBOARD VIEW -->
+      <section id="view-dashboard" class="view-section active">
+        <div class="card-header-row mb-2">
+          <div>
+            <h1>Reality Tournament Dashboard</h1>
+            <p>Track the stats, power catalogs, and records of current stuffed animal seasons.</p>
+          </div>
+          <button class="btn btn-primary btn-lg" onclick="openNewSeasonWizard()">🚀 New Season</button>
+        </div>
+
+        <div class="grid-cols-3 mb-2">
+          <div class="glass-card text-center">
+            <h3 class="color-winner">Active Season</h3>
+            <h2 id="dash-active-season-name">None</h2>
+            <p id="dash-active-season-status">Initialize one to start the show!</p>
+          </div>
+          <div class="glass-card text-center">
+            <h3 class="color-safe">Contestants Pool</h3>
+            <h2 id="dash-contestants-count">0</h2>
+            <p>Fully trained with special powers</p>
+          </div>
+          <div class="glass-card text-center">
+            <h3 class="color-danger">Global Challenges</h3>
+            <h2 id="dash-challenges-count">0</h2>
+            <p>Available in the reusable library</p>
+          </div>
+        </div>
+
+        <div class="grid-main-sidebar">
+          <!-- Active Season Detail (Quick View) -->
+          <div class="glass-card" id="dash-season-quickview-card">
+            <h3>🎭 Current Season Overview</h3>
+            <div id="dash-season-empty-state" class="text-center py-2">
+              <p>No active season currently running.</p>
+              <button class="btn btn-primary mt-1" onclick="openNewSeasonWizard()">Create a Season</button>
+            </div>
+            <div id="dash-season-active-state" class="hidden">
+              <h2 id="dash-active-title" style="margin-bottom:0.25rem;">Season Title</h2>
+              <div class="flex-row-justify mb-2">
+                <span id="dash-active-meta" class="logo-badge">5 Rounds • 2 Teams</span>
+                <button class="btn btn-sm" onclick="viewSeasonDetail()">Open Full Details →</button>
+              </div>
+              <div id="dash-active-summary" style="margin-top:1.5rem;">
+                <!-- Round status bar / highlights -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Stats Leaders -->
+          <div class="glass-card">
+            <h3>🌟 competitive Leaders</h3>
+            <div id="dash-leaders-list" class="teams-roster mt-1">
+              <!-- Dynamically populated top 3 contestants -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. CONTESTANTS VIEW -->
+      <section id="view-contestants" class="view-section">
+        <div class="card-header-row mb-2">
+          <div>
+            <h1>Stuffed Animal Pool</h1>
+            <p>Manage the contestants, view their character history, and inspect their active tournament records.</p>
+          </div>
+          <button class="btn btn-primary" onclick="openContestantModal()">🧸 Create Contestant</button>
+        </div>
+
+        <div class="grid-cols-4" id="contestants-grid">
+          <!-- Contestant cards populated dynamically -->
+        </div>
+      </section>
+
+      <!-- 3. POWERS LIBRARY VIEW -->
+      <section id="view-powers" class="view-section">
+        <div class="card-header-row mb-2">
+          <div>
+            <h1>Powers Library</h1>
+            <p>Define superpowers that can be assigned as tags to your stuffed animal contestants.</p>
+          </div>
+          <button class="btn btn-primary" onclick="openPowerModal()">⚡ Create Power</button>
+        </div>
+
+        <div class="grid-cols-3" id="powers-grid">
+          <!-- Power cards populated dynamically -->
+        </div>
+      </section>
+
+      <!-- 4. SEASONS VIEW -->
+      <section id="view-seasons" class="view-section">
+        <div class="card-header-row mb-2">
+          <div>
+            <h1>Seasons Hub</h1>
+            <p>Create new reality show iterations, browse past season brackets, and manage round progress.</p>
+          </div>
+          <button class="btn btn-primary" onclick="openNewSeasonWizard()">🏆 Create Season</button>
+        </div>
+
+        <div id="seasons-empty-state" class="glass-card text-center py-2 hidden">
+          <h2>No Seasons Organized Yet</h2>
+          <p class="mb-1">Be the host! Draft contestants, form teams, and configure rounds.</p>
+          <button class="btn btn-primary" onclick="openNewSeasonWizard()">Draft First Season</button>
+        </div>
+
+        <div class="grid-cols-2" id="seasons-grid">
+          <!-- Season cards populated dynamically -->
+        </div>
+      </section>
+
+      <!-- 5. SEASON DETAIL VIEW (DYNAMICAL VIEW) -->
+      <section id="view-season-detail" class="view-section">
+        <div class="card-header-row mb-2">
+          <div>
+            <button class="btn btn-sm btn-ghost mb-1" onclick="switchView('seasons')">← Back to Seasons</button>
+            <h1 id="detail-season-name">Season Name</h1>
+            <p id="detail-season-status">Status: Active</p>
+          </div>
+          <div class="app-nav">
+            <button class="btn btn-primary" id="btn-complete-season" onclick="completeSeason()">🏆 Finish Season</button>
+            <button class="btn btn-danger" onclick="deleteActiveSeason()">Delete</button>
+          </div>
+        </div>
+
+        <div class="grid-main-sidebar">
+          <!-- Main bracket and rounds timeline -->
+          <div class="glass-card">
+            <div class="flex-row-justify mb-2">
+              <h3>🏆 Season Timeline & Round Brackets</h3>
+              <!-- Quick filter/action -->
+            </div>
+            <div id="detail-bracket-list" class="bracket-wrapper">
+              <!-- Dynamically populated round brackets -->
+            </div>
+          </div>
+
+          <!-- Teams and active members roster -->
+          <div class="teams-roster-column">
+            <div class="glass-card mb-2">
+              <h3>👥 Season Teams</h3>
+              <div id="detail-teams-list" class="teams-roster mt-1">
+                <!-- Dynamically populated teams roster -->
+              </div>
+            </div>
+
+            <!-- Challenge Library / Add challenge action inside season -->
+            <div class="glass-card" id="season-controls-card">
+              <h3>⚙️ Season Operations</h3>
+              <div id="active-season-actions">
+                <!-- Dynamically populated next round controller -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ─── MODAL: Contestant Create/Edit ─── -->
+  <div class="modal-overlay" id="contestant-modal">
+    <div class="modal-content glass-card">
+      <div class="card-header-row">
+        <h2 id="contestant-modal-title">Create Contestant</h2>
+        <button class="btn btn-sm" onclick="closeContestantModal()">✕</button>
+      </div>
+      <form id="contestant-form" onsubmit="saveContestant(event)">
+        <input type="hidden" id="contestant-id" />
+        
+        <div class="form-group">
+          <label>Select Avatar Portrait</label>
+          <div class="avatar-grid">
+            <div class="avatar-option selected" onclick="selectAvatarOption(this, 'images/contestants/fire_bear.png')">
+              <img src="images/contestants/fire_bear.png" alt="Fire Bear" />
+            </div>
+            <div class="avatar-option" onclick="selectAvatarOption(this, 'images/contestants/cosmic_panda.png')">
+              <img src="images/contestants/cosmic_panda.png" alt="Cosmic Panda" />
+            </div>
+            <div class="avatar-option" onclick="selectAvatarOption(this, 'images/contestants/nature_owl.png')">
+              <img src="images/contestants/nature_owl.png" alt="Nature Owl" />
+            </div>
+            <div class="avatar-option" onclick="selectAvatarOption(this, 'images/contestants/void_rabbit.png')">
+              <img src="images/contestants/void_rabbit.png" alt="Void Rabbit" />
+            </div>
+          </div>
+          <label for="contestant-photo">Or enter custom image URL</label>
+          <input type="text" id="contestant-photo" placeholder="https://example.com/avatar.png" />
+        </div>
+
+        <div class="form-group">
+          <label for="contestant-name">Name</label>
+          <input type="text" id="contestant-name" required placeholder="e.g. Barnaby Sr." />
+        </div>
+
+        <div class="form-group">
+          <label>Assign Powers Tag Library</label>
+          <div id="contestant-powers-checkboxes" class="power-tags-row" style="margin-top:0.5rem; background:rgba(0,0,0,0.2); padding:0.75rem; border-radius: var(--radius-md);">
+            <!-- Populated dynamically with checkboxes of all powers -->
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="contestant-bio">Biography</label>
+          <textarea id="contestant-bio" rows="3" placeholder="Explain their background, powers, and competitive drive..."></textarea>
+        </div>
+
+        <div class="form-group" id="contestant-change-desc-group">
+          <label for="contestant-change-desc">Change History Notes (Versioning)</label>
+          <input type="text" id="contestant-change-desc" placeholder="e.g., Updated powers tag, changed bio description" />
+        </div>
+
+        <div class="text-right">
+          <button type="button" class="btn" onclick="closeContestantModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btn-save-contestant">Save Contestant</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ─── MODAL: Power Create/Edit ─── -->
+  <div class="modal-overlay" id="power-modal">
+    <div class="modal-content glass-card">
+      <div class="card-header-row">
+        <h2 id="power-modal-title">Create Superpower</h2>
+        <button class="btn btn-sm" onclick="closePowerModal()">✕</button>
+      </div>
+      <form id="power-form" onsubmit="savePower(event)">
+        <input type="hidden" id="power-id" />
+        
+        <div class="form-group">
+          <label for="power-name">Power Title</label>
+          <input type="text" id="power-name" required placeholder="e.g. Frost Spike" />
+        </div>
+
+        <div class="form-group">
+          <label for="power-code">Unique Code Tag</label>
+          <input type="text" id="power-code" required placeholder="e.g. ice" />
+        </div>
+
+        <div class="form-group">
+          <label for="power-description">Description</label>
+          <textarea id="power-description" rows="2" placeholder="Describe the capabilities..."></textarea>
+        </div>
+
+        <div class="grid-cols-2">
+          <div class="form-group">
+            <label for="power-icon">Emoji Icon</label>
+            <input type="text" id="power-icon" required placeholder="e.g. ❄️" />
+          </div>
+          <div class="form-group">
+            <label for="power-color">Aesthetic Theme Color (HEX)</label>
+            <input type="text" id="power-color" required placeholder="e.g. #00bcd4" />
+          </div>
+        </div>
+
+        <div class="text-right">
+          <button type="button" class="btn" onclick="closePowerModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Power</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ─── MODAL: Season Wizard ─── -->
+  <div class="modal-overlay" id="season-wizard-modal">
+    <div class="modal-content glass-card" style="max-width:700px;">
+      <div class="card-header-row">
+        <h2>🏆 Reality Season Setup Wizard</h2>
+        <button class="btn btn-sm" onclick="closeSeasonWizard()">✕</button>
+      </div>
+      <form id="season-wizard-form" onsubmit="saveSeason(event)">
+        <div class="form-group">
+          <label for="season-w-name">Season Name / Title</label>
+          <input type="text" id="season-w-name" required placeholder="e.g. Season 1: Battle of elements" />
+        </div>
+
+        <div class="grid-cols-2">
+          <div class="form-group">
+            <label for="season-w-rounds">Number of Rounds</label>
+            <input type="number" id="season-w-rounds" min="1" max="15" value="5" required />
+          </div>
+          <div class="form-group">
+            <label for="season-w-teams">Number of Teams</label>
+            <select id="season-w-teams" onchange="generateTeamSetupInputs()">
+              <option value="2">2 Teams</option>
+              <option value="3">3 Teams</option>
+              <option value="4">4 Teams</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Dynamic team configuration: members selection -->
+        <div class="form-group">
+          <label>Draft Teams & Assign Contestants</label>
+          <div id="wizard-teams-setup" style="display:flex; flex-direction:column; gap:1rem;">
+            <!-- Dynamically populated teams naming & members checkboxes -->
+          </div>
+        </div>
+
+        <div class="text-right mt-2">
+          <button type="button" class="btn" onclick="closeSeasonWizard()">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-lg">🚀 Launch Reality Show!</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ─── MODAL: Contestant History Timeline ─── -->
+  <div class="modal-overlay" id="history-modal">
+    <div class="modal-content glass-card">
+      <div class="card-header-row">
+        <h2>📜 Character Version History</h2>
+        <button class="btn btn-sm" onclick="closeHistoryModal()">✕</button>
+      </div>
+      <div>
+        <h3 id="history-contestant-name">Contestant Name</h3>
+        <p>Complete historical log of edits and changes made to this contestant's profile.</p>
+        
+        <div id="history-timeline-container" class="timeline">
+          <!-- Timelines populated dynamically -->
+        </div>
+      </div>
+      <div class="text-right mt-2">
+        <button class="btn" onclick="closeHistoryModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── MODAL: Record Challenge Progress ─── -->
+  <div class="modal-overlay" id="challenge-record-modal">
+    <div class="modal-content glass-card">
+      <div class="card-header-row">
+        <h2>⚔️ Record Challenge Instance</h2>
+        <button class="btn btn-sm" onclick="closeChallengeRecordModal()">✕</button>
+      </div>
+      <form id="challenge-record-form" onsubmit="saveChallengeInstance(event)">
+        <input type="hidden" id="challenge-record-round-idx" />
+        <input type="hidden" id="challenge-record-inst-id" />
+
+        <div class="form-group">
+          <label for="ch-rec-select">Choose Reusable Challenge from Library</label>
+          <select id="ch-rec-select" onchange="populateChallengeDetailsFromLibrary()">
+            <option value="">-- Create custom challenge or select --</option>
+            <!-- Populated dynamically with challenges library -->
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="ch-rec-title">Challenge Title</label>
+          <input type="text" id="ch-rec-title" required placeholder="e.g. Glacier Slalom Run" />
+        </div>
+
+        <div class="form-group">
+          <label for="ch-rec-desc">Description</label>
+          <textarea id="ch-rec-desc" rows="2" placeholder="Rules of the challenge..."></textarea>
+        </div>
+
+        <div class="grid-cols-3">
+          <div class="form-group">
+            <label for="ch-rec-winning">🏆 Winning Team</label>
+            <select id="ch-rec-winning" required>
+              <!-- Populated dynamically with season teams -->
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="ch-rec-safe">🛡️ Safe Team</label>
+            <select id="ch-rec-safe" required>
+              <!-- Populated dynamically with season teams -->
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="ch-rec-danger">⚠️ Up For Elimination</label>
+            <select id="ch-rec-danger" required>
+              <!-- Populated dynamically with season teams -->
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="ch-rec-narrative">Narrative Story / Highlights</label>
+          <textarea id="ch-rec-narrative" rows="3" placeholder="Describe the funny highlights or key events..."></textarea>
+        </div>
+
+        <div class="text-right">
+          <button type="button" class="btn" onclick="closeChallengeRecordModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Instance</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ─── MODAL: Record Elimination ─── -->
+  <div class="modal-overlay" id="elimination-record-modal">
+    <div class="modal-content glass-card">
+      <div class="card-header-row">
+        <h2>⚠️ Record Round Elimination</h2>
+        <button class="btn btn-sm" onclick="closeEliminationRecordModal()">✕</button>
+      </div>
+      <form id="elimination-record-form" onsubmit="saveElimination(event)">
+        <input type="hidden" id="elimination-record-round-idx" />
+
+        <div class="form-group">
+          <label for="elim-select">Select Contestant to Eliminate</label>
+          <p style="font-size:0.8rem; margin-bottom:0.5rem;" class="color-danger">Note: The contestants available are those currently active on the Up-For-Elimination team.</p>
+          <select id="elim-select" required>
+            <!-- Populated dynamically with active danger team members -->
+          </select>
+        </div>
+
+        <div class="text-right mt-2">
+          <button type="button" class="btn" onclick="closeEliminationRecordModal()">Cancel</button>
+          <button type="submit" class="btn btn-danger">Eliminate! 🪓</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

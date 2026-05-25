@@ -1,0 +1,9 @@
+node_modules
+npm-debug.log
+data/db.test.json
+data/db.json.tmp
+.git
+.github
+Dockerfile
+docker-compose.yml
+.DS_Store
